@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>Pong Game (Div-Based)</title>
+  <title>Pong Buddy</title>
   <style>
     body {
       margin: 0;
@@ -20,6 +20,7 @@
       background: #000;
       border: 2px solid white;
       overflow: hidden;
+      transition: all ease 0.2s;
     }
 
     .paddle {
@@ -48,7 +49,7 @@
       font-size: 2rem;
     }
 
-    .speed {
+    .speed , .hit {
       font-size: 14px;
       margin-top: 5px;
     }
@@ -73,6 +74,13 @@
       transition: all ease 0.5s;
     }
 
+    .stats{
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      gap: 1rem;
+    }
+
   </style>
 </head>
 <body>
@@ -91,7 +99,10 @@
     <div id="ball"></div>
   </div>
 
-  <div class="speed">Speed: <span id="speedDisplay">0</span></div>
+  <div class="stats">
+    <div class="speed">Ball speed: <span id="speedDisplay">0</span></div>
+    <div class="hit">Hit count: <span id="hitDisplay">0</span></div>
+  </div>
 
   <div id="reset" onclick="resetGame()" style="cursor: pointer;"> <div>RESET</div></div>
 
@@ -112,6 +123,7 @@
     const playerScoreElem = document.getElementById("playerScore");
     const aiScoreElem = document.getElementById("aiScore");
     const speedDisplay = document.getElementById("speedDisplay");
+    const hitDisplay = document.getElementById("hitDisplay")
 
     // Constants
     const gameWidth = 600;
@@ -130,10 +142,38 @@
 
     let playerScore = 0;
     let aiScore = 0;
-    let hitCount = 0;
+    // let hitCount = 0;
     let aiError = 0.8;
     let aiAccuracy = 0.5;
+    
+    let _hitCount = 0;
+      Object.defineProperty(window, 'hitCount', {
+        get() {
+          return _hitCount;
+        },
+        set(value) {
+          _hitCount = value;
+          onHitCountChange(value); // your function
+        }
+      });
 
+      function onHitCountChange(newValue) {
+        console.log("Hit count:", newValue);
+        const gameElem = document.querySelector('#game');
+        
+        hitDisplay.textContent = newValue
+        gameElem.style.border = "2px solid #6c6efe"; // Highlight
+        gameElem.style.boxShadow = "0 0 5px #6c6efe"; // Highlight
+
+        // Reset after 1 second
+        setTimeout(() => {
+          gameElem.style.border = ""; // Remove or reset border
+          gameElem.style.boxShadow = ""; // Highlight
+
+        }, 100);
+      }
+
+    
     function resetBall() {
       ballX = gameWidth / 2 - ballSize / 2;
       ballY = gameHeight / 2 - ballSize / 2;
@@ -145,6 +185,7 @@
       aiError = 0.8;
       aiAccuracy = 0.9;
     }
+
 
     function updatePositions() {
       // Player movement
