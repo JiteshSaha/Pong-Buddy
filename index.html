@@ -60,6 +60,9 @@
     justify-content: center;
     }
     
+    #reset:hover {
+      transform: scale(1.1);
+    }
 
     #reset div {
       align-self: center;
@@ -67,6 +70,7 @@
       background-color: transparent;
       border: 2px solid white;
       padding: 10px 20px;
+      transition: all ease 0.5s;
     }
 
   </style>
@@ -89,7 +93,15 @@
 
   <div class="speed">Speed: <span id="speedDisplay">0</span></div>
 
-  <div id="reset"> <div>RESET</div></div>
+  <div id="reset" onclick="resetGame()" style="cursor: pointer;"> <div>RESET</div></div>
+
+  <script>
+    function resetGame() {
+
+      document.querySelector("#reset").style.transform = "scale(0.8)"
+      location.reload();  // This will reload the page and reset the game
+    }
+  </script>
 
   <script>
     // DOM Elements
